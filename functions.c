@@ -3,10 +3,10 @@
 #include "main.h"
 
 /**
-* print_char - prints a character
-* @args: va_list containing the character to print
-* Return: number of characters printed
-*/
+ * print_char - prints a character
+ * @args: va_list containing the character to print
+ * Return: number of characters printed
+ */
 int print_char(va_list *args)
 {
 	char c = (char)(va_arg(*args, int));
@@ -14,10 +14,10 @@ int print_char(va_list *args)
 	return (write(1, &c, 1));
 }
 /**
-* print_str - prints a string
-* @args: va_list containing the string to print
-* Return: number of characters printed
-*/
+ * print_str - prints a string
+ * @args: va_list containing the string to print
+ * Return: number of characters printed
+ */
 int print_str(va_list *args)
 {
 	int i;
@@ -32,10 +32,10 @@ int print_str(va_list *args)
 	return (write(1, s, i));
 }
 /**
-* print_per - prints a percent sign
-* @args: va_list (not used)
-* Return: number of characters printed
-*/
+ * print_per - prints a percent sign
+ * @args: va_list (not used)
+ * Return: number of characters printed
+ */
 int print_per(va_list *args)
 {
 	char p = '%';
@@ -46,10 +46,10 @@ int print_per(va_list *args)
 }
 
 /**
-* print_int - prints an integer
-* @args: va_list containing the integer to print
-* Return: number of characters printed
-*/
+ * print_int - prints an integer
+ * @args: va_list containing the integer to print
+ * Return: number of characters printed
+ */
 int print_int(va_list *args)
 {
 	long int n;
