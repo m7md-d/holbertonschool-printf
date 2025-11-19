@@ -30,25 +30,27 @@ int _printf(const char *format, ...)
 		j = 0;
 		if (format[i] == '%' && format[i + 1])
 		{
+			len += write(1, &format[last_print], i - last_print);
 			i++;
 			while (prt_fun[j].c != '\0')
 			{
 				if (format[i] == prt_fun[j].c)
 				{
-					len += write(1, &format[last_print], i - last_print - 1);
 					len += prt_fun[j].func_ptr(&args);
 					last_print = i + 1;
 					break;
 				}
 				j++;
-				if (!prt_fun[j].c)
-					i++;
 			}
 		}
-		else
-			i++;
+		else if (format[i] == '%' && !format[i + 1])
+		{
+			last_print = i;
+			break;
+		}
+		i++;
 	}
-	if (i != last_print)
+	if (i - 1 != last_print)
 		len += (write(1, &format[last_print], i - last_print));
 	va_end(args);
 	return (len);
