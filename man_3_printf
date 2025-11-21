@@ -29,6 +29,13 @@ It is like a dictionary that maps a character (like 's') to the specific functio
 .PP
 .B 3. Calling the Right Function:
 Once it finds a match in the array, it calls that function pointer, passing it the list of arguments. The handler function does its job, prints the thing, and returns how many characters it printed.
+.PP
+.B 4. The Buffer Strategy:
+To improve performance, we don't call
+.B write
+for every single character. Instead, we use a local buffer of 1024 characters. Characters are added to this buffer, and
+.B write
+is only called when the buffer is full or when the function finishes execution.
 
 .SH WHAT'S IMPLEMENTED
 This is what we've built support for. If it's not on this list, it won't work.
@@ -48,6 +55,27 @@ For integers. Right now, our code treats them as the exact same thing. (Both use
 .B %%
 For printing a literal '%' sign.i (Uses
 .BR print_per)
+.TP
+.B %b
+For unsigned integers. Converts the number to binary representation. (Uses
+.BR print_binary)
+.TP
+.B %u
+For unsigned integers. Prints the number without a sign. (Uses
+.BR print_unsigned)
+.TP
+.B %o
+For unsigned integers. Converts the number to octal representation. (Uses
+.BR print_octal)
+.TP
+.B %x
+For unsigned integers. Converts the number to hexadecimal representation using lowercase letters (a-f). (Uses
+.BR print_hex)
+.TP
+.B %X
+For unsigned integers. Converts the number to hexadecimal representation using uppercase letters (A-F). (Uses
+.BR print_HEX)
+
 .SH EXAMPLES
 .B Strings and chars:
 .sp
@@ -78,6 +106,22 @@ _printf("The bill was $%d, and I only have $%i :(.", 23, 20);
 .RS
 .nf
 The bill was $23, and I only have $20 :(.
+.fi
+.RE
+.sp
+.B Binary and Hex:
+.sp
+.RS
+.nf
+_printf("Binary: %b, Hex: %X\n", 98, 255);
+.fi
+.RE
+.sp
+.B Output:
+.sp
+.RS
+.nf
+Binary: 1100010, Hex: FF
 .fi
 .RE
 
