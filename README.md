@@ -1,5 +1,13 @@
 # _printf
 
+## Index
+- [Description](#description)
+- [Features](#features)
+- [File Structure](#file-structure)
+- [Example Usage](#example-usage)
+- [Compilation](#compilation)
+- [Requirements](#requirements)
+- [Authors](#authors)
 
 ## Description
 This custom implementation mimics the behavior of the standard C library `printf` for the supported specifiers.
@@ -14,12 +22,17 @@ It handles a subset of the original specifiers and demonstrates knowledge of:
 ## Features
 Our `_printf` supports the following conversion specifiers:
 
-| Specifier | Description |
-|----------|-------------------------------|
-| `%c` | Prints a single character |
-| `%s` | Prints a string |
-| `%%` | Prints a percent sign |
-| `%d, %i` | Prints a decimal number |
+| Specifier  | Description                              |
+|------------|------------------------------------------|
+| `%c`       | Prints a single character                |
+| `%s`       | Prints a string                          |
+| `%%`       | Prints a percent sign                    |
+| `%d`, `%i` | Prints a signed integer                  |
+| `%b`       | Prints an unsigned int in binary         |
+| `%u`       | Prints an unsigned integer               |
+| `%o`       | Prints a number in octal                 |
+| `%x`       | Prints a number in lowercase hexadecimal |
+| `%X`       | Prints a number in uppercase hexadecimal |
 
 ## File Structure
 ```
@@ -27,35 +40,26 @@ _printf/
 │
 ├── _printf.c              # Main printf function
 ├── functions.c            # Selects correct handler based on specifier
+├── functions_2.c          # Extended handlers (numbers, strings, etc.)
+├── handl_func.c           # Handler execution + specifier mapping
 ├── man_3_printf           # Manual page source file for the _printf function
 ├── main.h                 # Header file with structs & prototypes
 └── README.md              # Project documentation
 ```
 
-## How `_printf` Works
-  
-1. `_printf` loops through the format string.
-2. When it sees a `%`, it checks the next character.
-3. `_printf` check `prt_fun`, which:
-- Matches the specifier to a handler function
-- Calls that function using a function pointer
-4. The handler function:
-- Extracts its argument from `va_list`
-- Prints it using `write()`
-- Returns how many characters were printed
-5. `_printf` adds the returned value to its total count
-6. `_printf` returns the number of printed characters
- 
-
 ## Example Usage
-### Test Code
 ```c
+/* Test code */
 _printf("Character: %c\n", 'A');
 _printf("Hello %s!\n", "World");
 _printf("Percent: %%\n");
 _printf("Number: %d\n", 1234);
 _printf("Number: %i\n", 4321);
-
+_printf("Binary: %b\n", 98);
+_printf("Unsigned: %u\n", 3000000000U);
+_printf("Octal: %o\n", 255);
+_printf("Hex (lowercase): %x\n", 255);
+_printf("Hex (UPPERCASE): %X\n", 255);
 
 /* Output */
 
@@ -64,9 +68,16 @@ Hello World!
 Percent: %
 Number: 1234
 Number: 4321
+Binary: 1100010
+Unsigned: 3000000000
+Octal: 377
+Hex (lowercase): ff
+Hex (UPPERCASE): FF
+
+/* Large values (e.g., 3000000000U) are supported as long as your system uses 32-bit or larger unsigned int */
 ```
 
-### Compilation
+## Compilation
 
 To compile all source files into an executable called `printf`, run:
 
@@ -95,10 +106,3 @@ gcc -Wall -Wextra -Werror -pedantic -std=gnu89 *.c
 - Badriah Barakat Almalki
 
 **This project completed as part of Holberton School Cohort — Riyadh, KSA.**
-
-## Notes
-This project does not handle:
-- Field width
-- Precision
-- Flags (+, space, #, 0, -)
-- Length modifiers (l, h)
