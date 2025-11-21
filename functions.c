@@ -131,3 +131,4 @@ int print_binary(va_list *args, char buffer[], int *ibuf)
 	}
 	return (count);
 }
+

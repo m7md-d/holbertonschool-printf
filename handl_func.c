@@ -56,3 +56,4 @@ int handle_print(const char *fmt, int *i, va_list *args, char buffer[], int *ibu
 	handl_buf(buffer, fmt[*i], ibuf);
 	return (2);
 }
+
