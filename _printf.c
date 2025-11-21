@@ -13,45 +13,31 @@
  */
 int _printf(const char *format, ...)
 {
-	int i = 0, j = 0, len = 0, last_print = 0;
+	int i = 0, len = 0, ibuf = 0, ret;
+	char buffer[1024];
 	va_list args;
-	prt_f prt_fun[] = {
-		{'c', print_char},
-		{'s', print_str},
-		{'%', print_per},
-		{'i', print_int},
-		{'d', print_int},
-		{'\0', NULL}
-	};
-	va_start(args, format);
 
-	while (format[i] != '\0')
+	if (!format)
+		return (-1);
+	va_start(args, format);
+	while (format[i])
 	{
-		j = 0;
-		if (format[i] == '%' && format[i + 1])
+		if (format[i] != '%')
 		{
-			len += write(1, &format[last_print], i - last_print);
-			i++;
-			while (prt_fun[j].c != '\0')
-			{
-				if (format[i] == prt_fun[j].c)
-				{
-					len += prt_fun[j].func_ptr(&args);
-					last_print = i + 1;
-					break;
-				}
-				j++;
-			}
+			handl_buf(buffer, format[i], &ibuf);
+			len++;
 		}
-		else if (format[i] == '%' && !format[i + 1])
+		else
 		{
-			last_print = i;
-			break;
+			ret = handle_print(format, &i, &args, buffer, &ibuf);
+			if (ret == -1)
+				return (-1);
+			len += ret;
 		}
 		i++;
 	}
-	if (i - 1 != last_print)
-		len += (write(1, &format[last_print], i - last_print));
+	write(1, buffer, ibuf);
+
 	va_end(args);
 	return (len);
 }
