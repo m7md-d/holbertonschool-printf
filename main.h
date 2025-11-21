@@ -1,7 +1,7 @@
-#include <stdarg.h>
-
 #ifndef MAIN_H
 #define MAIN_H
+
+#include <stdarg.h>
 
 int _printf(const char *format, ...);
 
@@ -9,6 +9,13 @@ int print_char(va_list *args);
 int print_str(va_list *args);
 int print_per(va_list *args);
 int print_int(va_list *args);
+
+int print_binary(va_list *args, char buffer[], int *ibuf);
+
+int print_unsigned(va_list *args, char buffer[], int *ibuf);
+int print_octal(va_list *args, char buffer[], int *ibuf);
+int print_hex(va_list *args, char buffer[], int *ibuf);
+int print_HEX(va_list *args, char buffer[], int *ibuf);
 
 /**
  * struct prt_fun - Structure to map format specifiers to handler functions.
@@ -25,5 +32,8 @@ typedef struct prt_fun
 	char c;
 	int (*func_ptr)(va_list *);
 } prt_f;
+
+void handl_buf(char buffer[], char c, int *ibuf);
+int handle_print(const char *fmt, int *i, va_list *args, char buffer[], int *ibuf);
 
 #endif /* MAIN_H */
