@@ -5,20 +5,25 @@
 /**
 * print_char - prints a character
 * @args: va_list containing the character to print
+* @buffer: buffer to store the character
+* @ibuf: pointer to the current index in the buffer
 * Return: number of characters printed
 */
-int print_char(va_list *args)
+int print_char(va_list *args, char buffer[], int *ibuf)
 {
 	char c = (char)(va_arg(*args, int));
 
-	return (write(1, &c, 1));
+	handl_buf(buffer, c, ibuf);
+	return (1);
 }
 /**
 * print_str - prints a string
 * @args: va_list containing the string to print
+* @buffer: buffer to store the string
+* @ibuf: pointer to the current index in the buffer
 * Return: number of characters printed
 */
-int print_str(va_list *args)
+int print_str(va_list *args, char buffer[], int *ibuf)
 {
 	int i;
 
@@ -27,30 +32,32 @@ int print_str(va_list *args)
 	if (s == NULL)
 		s = "(null)";
 	for (i = 0; s[i] != '\0'; i++)
-		;
+		handl_buf(buffer, s[i], ibuf);
 
-	return (write(1, s, i));
+	return (i);
 }
 /**
 * print_per - prints a percent sign
 * @args: va_list (not used)
+* @buffer: buffer to store the percent sign
+* @ibuf: pointer to the current index in the buffer
 * Return: number of characters printed
 */
-int print_per(va_list *args)
+int print_per(va_list *args, char buffer[], int *ibuf)
 {
-	char p = '%';
-
 	(void)*args;
-
-	return (write(1, &p, 1));
+	handl_buf(buffer, '%', ibuf);
+	return (1);
 }
 
 /**
 * print_int - prints an integer
 * @args: va_list containing the integer to print
+* @buffer: buffer to store the integer
+* @ibuf: pointer to the current index in the buffer
 * Return: number of characters printed
 */
-int print_int(va_list *args)
+int print_int(va_list *args, char buffer[], int *ibuf)
 {
 	long int n;
 
@@ -62,14 +69,15 @@ int print_int(va_list *args)
 
 	if (n < 0)
 	{
-		len += write(1, "-", 1);
+		handl_buf(buffer, '-', ibuf);
+		len++;
 		tmp1 = -n;
 	}
 	else if (n == 0)
 	{
-		return (write(1, "0", 1));
+		handl_buf(buffer, '0', ibuf);
+		return (1);
 	}
-
 	else
 		tmp1 = n;
 	while (tmp1 / tmp2 > 9)
@@ -77,7 +85,8 @@ int print_int(va_list *args)
 	while (tmp2)
 	{
 		nump = (tmp1 / tmp2) + '0';
-		len += write(1, &nump, 1);
+		handl_buf(buffer, nump, ibuf);
+		len++;
 		tmp1 %= tmp2;
 		tmp2 /= 10;
 	}
@@ -85,9 +94,9 @@ int print_int(va_list *args)
 }
 
 /**
-* print_binary - prints an unsigned integer in binary format
+* print_binary - prints an unsigned integer in binary
 * @args: va_list containing the unsigned integer to print
-* @buffer: buffer to store the output
+* @buffer: buffer to store the binary representation
 * @ibuf: pointer to the current index in the buffer
 * Return: number of characters printed
 */
